@@ -130,7 +130,7 @@ function clear_dom() {
 function state_pusher(func, arg) {
   state = {func:func, arg:arg};
   history.pushState(state, '', '');
-  alert(state.toSource());
+  // alert(state.toSource());
 }
 
 window.onpopstate = function(event) {
