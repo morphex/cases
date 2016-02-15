@@ -1,5 +1,9 @@
 <?php
 
+if (empty($_FILES)) {
+  return;
+}
+
 include 'db.php';
 
 $file = fopen($_FILES['image']['tmp_name'], 'rb');

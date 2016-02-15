@@ -27,7 +27,7 @@ $msql->query($query);
 
 $query = "
 CREATE TABLE IF NOT EXISTS `images` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `name` text COLLATE utf8_unicode_ci NOT NULL,
   `content` longblob NOT NULL,
   UNIQUE KEY `id` (`id`)

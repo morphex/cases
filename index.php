@@ -15,7 +15,7 @@ include 'db.php';
 	<script type="text/javascript" src="jquery-1.12.0.min.js"></script>
 	<script type="text/javascript">
 // Global variable for working on the ID
-// var id = "";
+var id = "";
 
 function increment_counter() {
   var counter = $("#counter");
@@ -39,17 +39,19 @@ increment_counter();
 
 form_data = new FormData();
 form_data.append("image", $("#image").prop('files')[0])
-form_data.append("id", $("#id").val())
+form_data.append("id", $("#id").val());
 $.ajax({type:'POST',
   url:'post_image.php',
   data:form_data,
   success:decrement_counter,
+  error:decrement_counter,
   cache:false,
   contentType:false,
   processData:false
 })
 $("#case_edit").css('display', 'none');
 setup_view(id);
+state_pusher('setup_view', id);
 }
 
 function setup_view(id) {
@@ -69,16 +71,18 @@ data = $.ajax({type:'GET',
     content = xml.find('content').first().text();
     has_image = xml.find('has_image').first().text();
   }
-})
+});
 $("#title_view").text(title);
 $("#content_view").text(content);
 if (parseInt(has_image) > 0) {
   $("#image_view").attr('src', 'view_image.php?id='+id);
   $("#image_coming").css('display', 'none');
 } else {
+  $("#image_view").attr('src', default_image);
   $("#image_coming").css('display', 'inline');  
 }
-$("#edit_case_button").attr('onclick', "edit_case("+id+")")
+oc =  "edit_case("+id+")" + ";state_pusher('edit_case',"+id+");";
+$("#edit_case_button").attr('onclick', oc);
 $("#case_view").css('display', 'block');
 $("#case_edit").css('display', 'none');
 }
@@ -121,6 +125,20 @@ function clear_dom() {
   $("#content").html(''); // Necessary to reset textarea
 }
 
+// Pushes javascript state information,
+// the function call and the argument
+function state_pusher(func, arg) {
+  state = {func:func, arg:arg};
+  history.pushState(state, '', '');
+  alert(state.toSource());
+}
+
+window.onpopstate = function(event) {
+  if (event.state != null ) {
+    eval(event.state['func'] + '(' + event.state['arg'] + ')');
+  }
+}
+
 </script>
 </head>
 <body>
@@ -134,10 +152,13 @@ if ($result) {
 while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
 $id = $row['id'];
 $title = $row['title'];
-echo "<a href=\"#\" onclick='javascript:";
+echo "<a href=\"#\" onclick=\"javascript:";
 echo "setup_view(";
 echo $id;
-echo ");'>Se p&aring; {$title}</a>";
+echo "); state_pusher(";
+echo "'setup_view',";
+echo $id;
+echo '); return false">Se p&aring; ' . $title . '</a>';
 echo '<br />';
 }
 }
@@ -145,7 +166,7 @@ echo '<br />';
 ?>
 
 <br /><br />
-<a href="#" onclick="new_case()">Ny sak</a><br /><br />
+<a href="#" onclick="new_case(); return false">Ny sak</a><br /><br />
 
 <span id="counter">0</span> bilder lastes opp.
 </div>
