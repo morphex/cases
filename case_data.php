@@ -11,7 +11,11 @@ $row = $result->fetch_array(MYSQLI_ASSOC);
 $title = $row['title'];
 $content = $row['content'];
 $result = $msql->query("SELECT * FROM images WHERE id='$id'");
-$has_image = $result->num_rows;
+if ($result) {
+  $has_image = $result->num_rows;
+} else {
+  $has_image = 0;
+}
 
 ?>
 

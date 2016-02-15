@@ -21,8 +21,7 @@ $msql->query("COMMIT");
 echo 1;
 
 ob_start();
-var_dump($_POST);
-var_dump($_FILES);
+var_dump($msql->error);
 $output = ob_get_clean();
 $fileHandle = fopen("/tmp/output", "w");
 fwrite($fileHandle, $output);

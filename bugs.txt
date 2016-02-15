@@ -1,0 +1,6 @@
+Uploading large files fails silently, for testing use files < 50 KB in size.
+
+Adding new cases and going back and forth with navigation buttons
+doesn't work properly.
+
+Adding several new cases at a time doesn't work.
