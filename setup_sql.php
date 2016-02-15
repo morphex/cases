@@ -4,10 +4,15 @@ include 'db.php';
 
 ?>
 
+<?php
+
 $query = "SET SQL_MODE=\"NO_AUTO_VALUE_ON_ZERO\"";
 $msql->query($query);
 
 $query = "CREATE DATABASE cases CHARACTER SET utf8";
+$msql->query($query);
+
+$query = "USE cases";
 $msql->query($query);
 
 $query = "
@@ -28,5 +33,6 @@ CREATE TABLE IF NOT EXISTS `images` (
   UNIQUE KEY `id` (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=71 ;
 ";
-$msql->query;
+$msql->query($query);
 
+?>

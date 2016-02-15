@@ -15,7 +15,7 @@ include 'db.php';
 	<script type="text/javascript" src="jquery-1.12.0.min.js"></script>
 	<script type="text/javascript">
 // Global variable for working on the ID
-var id = "";
+// var id = "";
 
 function increment_counter() {
   var counter = $("#counter");
@@ -49,11 +49,11 @@ $.ajax({type:'POST',
   processData:false
 })
 $("#case_edit").css('display', 'none');
-$("#case_form")[0].reset();
-$("#content").html(content); // Necessary to reset textarea
+setup_view(id);
 }
 
 function setup_view(id) {
+clear_dom();
 var title = "";
 var content = "";
 var has_image = "0";
@@ -84,13 +84,13 @@ $("#case_edit").css('display', 'none');
 }
 
 function new_case() {
-  $("#case_form")[0].reset();
-  $("#content").html(content); // Necessary to reset textarea
+  clear_dom();
   $('#case_edit').css('display', 'block');
   $('#case_view').css('display', 'none');
 }
 
 function edit_case(id) {
+clear_dom();
 var title = "";
 var content = "";
 var has_image = "0";
@@ -113,6 +113,14 @@ $("#content").html(content);
 $("#case_view").css('display', 'none');
 $("#case_edit").css('display', 'block');
 }
+
+// Clears DOM back to original state
+// Doesn't clear all CSS values
+function clear_dom() {
+  $("#case_form")[0].reset();
+  $("#content").html(''); // Necessary to reset textarea
+}
+
 </script>
 </head>
 <body>
@@ -122,6 +130,7 @@ $("#case_edit").css('display', 'block');
 <?php
 
 $result = $msql->query("SELECT * FROM cases");
+if ($result) {
 while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
 $id = $row['id'];
 $title = $row['title'];
@@ -130,6 +139,7 @@ echo "setup_view(";
 echo $id;
 echo ");'>Se p&aring; {$title}</a>";
 echo '<br />';
+}
 }
 
 ?>
@@ -141,10 +151,10 @@ echo '<br />';
 </div>
 <div id="main" style="float: right; width: 400px;">
 
-<div id="case_view" style="display: block;">
+<div id="case_view" style="display: none;">
 <h1 id="title_view"></h1>
 <img id="image_view" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQCAYAAACAvzbMAAAACXBIWXMAAAsTAAALEwEAmpwYAAADWUlEQVR42u3c0WqDMBSA4Wj2/m9ssptsnIWkXsx1aL4PAhZpC978nGqTEgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFxne8NnVpcZ4Hk+/iAcsygJCYCATMOxTSaQKiQAAtLHY7ZiPGoXEhEBMIF8B2MPKwakhCUeAA+RLwxHbkHKbfUxAcAEMoxIDitOIEc4ru2cKQRg0YD09zviFPJ1nNLPn6329rq/RwLAghPIq5ikEInZE1oA3NTuEgDwXxNI/5huCedKGj/GC8DN5V++f/Tfj60LxtFCcgyCAsCCAZltXRInkTKJBwCLTyB9QOogIEc4Nn0APMRV90BSCERJ51uZAHBz24WfcbaZon2wAATkNCSjCUU4AB4kv+E7hAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYHmfSllSNVhSZsoAAAAASUVORK5CYII=" />
-<span id="image_coming" style="display: none;">Bilder er ikke lastet opp enn&aring;</span>
+<span id="image_coming" style="display: none;">Bildet er ikke lastet opp enn&aring;</span>
 <div id="content_view"></div>
 <form>
 <input type="button" id="edit_case_button" value=" Rediger denne saken " onclick="edit_case()" />
